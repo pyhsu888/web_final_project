@@ -1,0 +1,372 @@
+/* ========================================
+   NYCU Piano Reservation System
+   Global Stylesheet with Dark Mode Support
+   ======================================== */
+
+/* CSS Variables for Theming */
+:root {
+    /* Light Theme (Default) */
+    --bg-primary: #f4f4f9;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-muted: #888888;
+    --border-color: #dddddd;
+    --accent-color: #007bff;
+    --accent-hover: #0056b3;
+    --header-bg: #343a40;
+    --header-text: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --success-bg: #d4edda;
+    --success-text: #155724;
+    --error-bg: #f8d7da;
+    --error-text: #721c24;
+    --btn-primary: #007bff;
+    --btn-success: #28a745;
+    --btn-danger: #dc3545;
+    --btn-warning: #ffc107;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme */
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+    --text-primary: #e4e4e4;
+    --text-secondary: #b0b0b0;
+    --text-muted: #888888;
+    --border-color: #444444;
+    --accent-color: #4dabf7;
+    --accent-hover: #74c0fc;
+    --header-bg: #0f3460;
+    --header-text: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --success-bg: #2d4a3e;
+    --success-text: #8fd19e;
+    --error-bg: #4a2d2d;
+    --error-text: #f5a5a5;
+    --btn-primary: #4dabf7;
+    --btn-success: #51cf66;
+    --btn-danger: #ff6b6b;
+    --btn-warning: #fcc419;
+}
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+/* Header / Navigation */
+header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-links a {
+    color: #ddd;
+    text-decoration: none;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+/* User Info Bar */
+.user-info-bar {
+    background: var(--bg-tertiary);
+    padding: 10px 20px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Section Title */
+.section-title {
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+}
+
+/* Cards */
+.card {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--card-shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card h3, .card h4 {
+    margin-top: 0;
+    color: var(--text-primary);
+}
+
+.card-meta {
+    color: var(--text-muted);
+    font-size: 0.85em;
+    margin-bottom: 10px;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1em;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Buttons */
+button, .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--btn-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-success {
+    background-color: var(--btn-success);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--btn-danger);
+    color: white;
+}
+
+.btn-warning {
+    background-color: var(--btn-warning);
+    color: #333;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+
+/* Messages */
+.message {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.message.success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+}
+
+.message.error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--bg-secondary);
+}
+
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--bg-tertiary);
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.badge-admin {
+    background-color: var(--btn-primary);
+    color: white;
+}
+
+.badge-member {
+    background-color: #6c757d;
+    color: white;
+}
+
+.badge-banned {
+    background-color: var(--btn-danger);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px;
+}
+
+/* Info Text */
+.info {
+    font-size: 0.9em;
+    color: var(--text-muted);
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Language Switcher */
+.lang-switch {
+    font-size: 0.85em;
+    margin-left: 20px;
+    color: #aaa;
+}
+
+.lang-switch a {
+    color: #ccc;
+    margin: 0 5px;
+}
+
+.lang-switch a.active {
+    color: white;
+    font-weight: bold;
+}
+
+/* Auth Pages (Login/Register) */
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--card-shadow);
+}
+
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Profile Page Sections */
+.profile-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-section:last-child {
+    border-bottom: none;
+}
+
+.stat-box {
+    background-color: var(--bg-tertiary);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-size: 0.9em;
+}
