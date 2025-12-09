@@ -1,0 +1,7 @@
+//有修改的code
+database.sql : reservation table
+
+//新增檔案
+reservations.php
+reserve_action.php
+cancel_reservation.php
