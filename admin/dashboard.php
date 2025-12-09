@@ -32,6 +32,10 @@ include '../header.php';
             <h3><?php echo __('view_member_site'); ?></h3>
             <p class="info"><?php echo __('home'); ?></p>
         </a>
+        <a href="reservations.php" class="card"style="text-align:center; text-decoration:none;" >
+            <h3><?php echo __('view_reservations'); ?></h3>
+            <p class="info"><?php echo __('all_user_reservations'); ?></p>
+        </a>
     </div>
 </div>
 

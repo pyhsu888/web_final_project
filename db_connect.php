@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $dbname = 'piano_room_db';
-$username = 'CVML';
+$username = 'cvml';
 $password = '114DWP2025'; 
 
 try {

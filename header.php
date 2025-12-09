@@ -30,6 +30,9 @@ require_once __DIR__ . '/lang.php';
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../index.php' : 'index.php'; ?>"><?php echo __('home'); ?></a>
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../reservations.php' : 'reservations.php'; ?>"><?php echo __('book_room'); ?></a>
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../profile.php' : 'profile.php'; ?>"><?php echo __('profile'); ?></a>
+                <a href="<?php echo isset($isAdmin) && $isAdmin ? '../my_reservations.php' : 'my_reservations.php'; ?>">
+                    <?php echo __('my_reservations'); ?>
+                </a>
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <a href="<?php echo isset($isAdmin) && $isAdmin ? 'dashboard.php' : 'admin/dashboard.php'; ?>"><?php echo __('admin_dashboard'); ?></a>
                 <?php endif; ?>
@@ -41,7 +44,17 @@ require_once __DIR__ . '/lang.php';
             
             <!-- Language Switcher -->
             <span class="lang-switch">
-                <a href="?lang=zh" class="<?php echo $currentLang == 'zh' ? 'active' : ''; ?>">中文</a>|<a href="?lang=en" class="<?php echo $currentLang == 'en' ? 'active' : ''; ?>">EN</a>
+            <?php
+            $query = $_GET;
+
+            $query['lang'] = 'zh';
+            $zhUrl = '?' . http_build_query($query);
+
+            $query['lang'] = 'en';
+            $enUrl = '?' . http_build_query($query);
+            ?>
+            <a href="<?php echo $zhUrl; ?>" class="<?php echo $currentLang == 'zh' ? 'active' : ''; ?>">中文</a> |
+            <a href="<?php echo $enUrl; ?>" class="<?php echo $currentLang == 'en' ? 'active' : ''; ?>">EN</a>
             </span>
         </div>
     </header>
