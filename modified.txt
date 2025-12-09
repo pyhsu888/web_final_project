@@ -1,7 +1,48 @@
 //有修改的code
 database.sql : reservation table
+admin/dashboard.php: 新增可以查看所有預約的功能
+<a href="reservations.php" class="card" style="text-align:center; text-decoration:none;">
+    <h3>查看預約</h3>
+    <p class="info">所有使用者的預約</p>
+</a>
+
+style.css : 新增
+.my-booked {
+    background: #4f7cff !important;
+    color: white;
+}
+
+lang.php : zh、en有加新的
+
+header.php: 1. 改lang_switch那段
+            <span class="lang-switch">
+            <?php
+            $query = $_GET;
+
+            // 中文連結
+            $query['lang'] = 'zh';
+            $zhUrl = '?' . http_build_query($query);
+
+            // 英文連結
+            $query['lang'] = 'en';
+            $enUrl = '?' . http_build_query($query);
+            ?>
+            <a href="<?php echo $zhUrl; ?>" class="<?php echo $currentLang == 'zh' ? 'active' : ''; ?>">中文</a> |
+            <a href="<?php echo $enUrl; ?>" class="<?php echo $currentLang == 'en' ? 'active' : ''; ?>">EN</a>
+            </span>
+
+            2. 加 <a href="my_reservations.php"><?php echo __('my_reservations'); ?></a>
+
+admin/dashboard.php : 新增
+<a href="reservations.php" class="card"style="text-align:center; text-decoration:none;" >
+            <h3><?php echo __('view_reservations'); ?></h3>
+            <p class="info"><?php echo __('all_user_reservations'); ?></p>
+</a>
 
 //新增檔案
 reservations.php
 reserve_action.php
 cancel_reservation.php
+my_reservations.php
+admin/reservations.php
+
