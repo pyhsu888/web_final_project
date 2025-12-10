@@ -25,17 +25,22 @@ require_once __DIR__ . '/lang.php';
 <body>
     <header>
         <div class="logo">🎹 <?php echo __('site_title'); ?></div>
-        <div class="nav-links">
+
+        <button id="menu-toggle" class="menu-toggle">☰</button>
+
+        <div class="nav-links" id="nav-links">
             <?php if (isset($_SESSION['user_id'])): ?>
+                <a href="<?php echo isset($isAdmin) && $isAdmin ? '../manual.php' : 'manual.php'; ?>"><?php echo __('manual'); ?></a>
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../index.php' : 'index.php'; ?>"><?php echo __('home'); ?></a>
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../reservations.php' : 'reservations.php'; ?>"><?php echo __('book_room'); ?></a>
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../profile.php' : 'profile.php'; ?>"><?php echo __('profile'); ?></a>
-                <a href="<?php echo isset($isAdmin) && $isAdmin ? '../my_reservations.php' : 'my_reservations.php'; ?>">
-                    <?php echo __('my_reservations'); ?>
-                </a>
+                <a href="<?php echo isset($isAdmin) && $isAdmin ? '../my_reservations.php' : 'my_reservations.php'; ?>"><?php echo __('my_reservations'); ?></a>
+                <a href="<?php echo isset($isAdmin) && $isAdmin ? '../food.php' : 'food.php'; ?>"><?php echo __('food_system'); ?></a>
+
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <a href="<?php echo isset($isAdmin) && $isAdmin ? 'dashboard.php' : 'admin/dashboard.php'; ?>"><?php echo __('admin_dashboard'); ?></a>
                 <?php endif; ?>
+
                 <a href="<?php echo isset($isAdmin) && $isAdmin ? '../logout.php' : 'logout.php'; ?>"><?php echo __('logout'); ?></a>
             <?php else: ?>
                 <a href="login.php"><?php echo __('login'); ?></a>
@@ -65,3 +70,99 @@ require_once __DIR__ . '/lang.php';
         (<?php echo htmlspecialchars($user['department']); ?> <?php echo htmlspecialchars($user['grade']); ?><?php echo __('grade_suffix'); ?>)
     </div>
     <?php endif; ?>
+
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        position: relative;
+
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    .menu-toggle {
+        color: #fff;
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    /* Hamburger menu when width <= 768 */
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: block;
+        }
+
+        .nav-links {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--header-bg);
+            flex-direction: column;
+            border-top: 1px solid #ddd;
+            z-index: 1000;
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .nav-links a {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            width: 100%;
+            text-align: center;
+            margin: 0;
+        }
+
+        .lang-switch {
+            display: block;
+            padding: 15px 20px 15px 10px;
+            margin-left: 0;
+            text-align: center;
+        }
+
+        .lang-switch a {
+            border-bottom: none !important;
+            display: inline;
+            width: auto;
+            padding: 0 5px;
+            margin: 0;
+        }
+    }
+</style>
+
+<!-- Hamburger menu behavior(clicking) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', function(event) {
+                event.stopPropagation(); 
+                navLinks.classList.toggle('active');
+            });
+        }
+        
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = navLinks.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+            
+            if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
+                navLinks.classList.remove('active');
+            }
+        });
+    });
+</script>
