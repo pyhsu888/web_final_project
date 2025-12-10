@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); date_default_timezone_set('Asia/Taipei');
 $isAdmin = true;
 require '../db_connect.php';
 require '../lang.php';
@@ -67,9 +67,9 @@ include '../header.php';
                 <th><?php echo __('student_id'); ?></th>
                 <th><?php echo __('real_name'); ?></th>
                 <th>Dept / Grade</th>
-                <th>Role</th>
+                <th style="width:0px;">Role</th> 
                 <th>Status</th>
-                <th>Actions</th>
+                <th style="width:152px;">Actions</th>
             </tr>
         </thead>
         <tbody>

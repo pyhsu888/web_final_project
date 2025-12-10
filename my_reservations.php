@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); date_default_timezone_set('Asia/Taipei');
 require 'db_connect.php';
 require 'lang.php';
 
@@ -32,7 +32,7 @@ include 'header.php';
                 <th><?php echo __('room'); ?></th>
                 <th><?php echo __('date'); ?></th>
                 <th><?php echo __('time'); ?></th>
-                <th><?php echo __('action'); ?></th>
+                <th style="width:80px;"><?php echo __('action'); ?></th>
             </tr>
             <?php foreach ($list as $r): 
                 $start_ts = strtotime($r['date'].' '.$r['start_time']);

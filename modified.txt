@@ -48,3 +48,46 @@ cancel_reservation.php
 my_reservations.php
 admin/reservations.php
 
+
+/* chrislaiisme @12/11 */
+
+// db_connect.php
+    cvml -> CVML
+
+// lang.php
+    新增消夜系統 (Food System) 中英文翻譯
+    整合並移除重複的翻譯鍵值 (General/Auth/Admin)
+
+// header.php
+    CSS：新增 [data-theme="dark"] 樣式 (支援 Card/Input/Table 變色)
+    CSS：修復 Dark Mode 下按鈕位移問題 (改用 outline 取代 border)
+    Nav：優化語言切換 (Lang Switch) 邏輯保留參數
+    Nav：新增「我的預約 (My Reservations)」連結 (依權限判斷路徑)
+
+// footer.php
+    按鈕：固定右下角、icon置中、dark theme時背板顏色換成白色
+    新增系統時間
+
+// admin/dashboard.php
+    新增「消夜管理 (Food Management)」入口
+    新增「查看預約 (View Reservations)」入口
+
+// admin/food.php (New)
+    新增消夜管理後台：建立新團購、管理歷史紀錄
+    功能：切換開/關團狀態、修改截止時間、查看訂單詳細列表
+
+// food.php (New)
+    新增前台點餐頁面：查看進行中的團購
+    功能：新增/修改/取消訂單、顯示截止時間、顯示已點餐夥伴
+
+// reservation.php
+    改響應式
+
+// database.sql
+    新增 food_sessions, food_orders 資料表
+// manual & images (New)
+    使用說明
+
+// 剩下一些東東
+    反正就是一些細節
+    設時區為asia/taipei

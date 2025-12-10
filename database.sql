@@ -48,7 +48,31 @@ CREATE TABLE IF NOT EXISTS reservations (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS food_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    is_active TINYINT(1) DEFAULT 1,
+    start_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    end_time DATETIME DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS food_orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_id INT NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    note VARCHAR(255) DEFAULT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (session_id) REFERENCES food_sessions(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_session (user_id, session_id)
+);
+
 -- Clear old data
+DELETE FROM food_orders;
+DELETE FROM food_sessions;
 DELETE FROM reservations;
 DELETE FROM users;
 DELETE FROM allowed_student_ids;

@@ -32,7 +32,7 @@
     /* Dark Theme */
     --bg-primary: #1a1a2e;
     --bg-secondary: #16213e;
-    --bg-tertiary: #0f3460;
+    --bg-tertiary: #0a223f;
     --text-primary: #e4e4e4;
     --text-secondary: #b0b0b0;
     --text-muted: #888888;
@@ -109,6 +109,7 @@ header {
     padding: 10px 20px;
     text-align: right;
     border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-bottom 0.3s, transform 0.2s;
 }
 
 /* Container */
@@ -329,10 +330,11 @@ th {
 /* Auth Pages (Login/Register) */
 .auth-container {
     max-width: 400px;
+    width: calc(100% - 60px);
     margin: 50px auto;
     padding: 30px;
     background-color: var(--bg-secondary);
-    border-radius: 8px;
+    border-radius: 8px; 
     box-shadow: 0 2px 10px var(--card-shadow);
 }
 

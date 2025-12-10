@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); date_default_timezone_set('Asia/Taipei');
 require 'db_connect.php';
 require 'lang.php'; 
 
@@ -26,13 +26,14 @@ if ($offset > 1) $offset = 1;
 $weekStart = date('Y-m-d', strtotime("monday this week +{$offset} week"));
 $weekEnd   = date('Y-m-d', strtotime("sunday this week +{$offset} week"));
 
+$cutoffDateTime = date('Y-m-d H:i:s', strtotime('+30 minutes'));
 
 $stmt = $pdo->prepare("
     SELECT COUNT(*) FROM reservations
     WHERE user_id = ?
       AND date = ?
 ");
-$stmt->execute([$user_id, $today]);
+$stmt->execute([$user_id, $today]); 
 $todayUsed = (int)$stmt->fetchColumn();
 
 $stmt = $pdo->prepare("
@@ -79,8 +80,9 @@ include 'header.php';
 
 
     <div class="info-box" style="margin-bottom:15px;">
-        <?php echo __('today_remain'); ?>：<?php echo $todayRemain; ?> <?php echo __('hour'); ?>
-        <?php echo __('week_remain'); ?>：<?php echo $weekRemain; ?> <?php echo __('hour'); ?>
+        <?php echo __('today_remain'); ?>：<?php echo $todayRemain; ?> <?php echo __('hour(s)'); ?>
+        &nbsp;/&nbsp;
+        <?php echo __('week_remain'); ?>：<?php echo $weekRemain; ?> <?php echo __('hour(s)'); ?>
     </div>
     <div class="week-nav" style="margin-bottom:12px;">
 
@@ -111,115 +113,165 @@ include 'header.php';
         </select>
     </div>
 
-    <table id="scheduleTable">
-        <thead>
-            <tr>
-                <th>時間</th>
-                <?php
-                for ($i = 0; $i < 7; $i++) {
-                    $d = date('Y-m-d', strtotime("+$i day", strtotime($weekStart)));
-                    echo "<th>{$d}</th>";
+    <div class="table-wrapper">
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>時間</th>
+                    <?php
+                    for ($i = 0; $i <= 6; $i++) {
+                        $d = date('Y-m-d', strtotime("+$i day", strtotime($weekStart)));
+                        echo "<th>{$d}</th>";
+                    }
+                    ?>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            for ($h = 8; $h <= 23; $h++) {
+                $time = sprintf("%02d:00:00", $h); 
+                $timeLabel = substr($time, 0, 5);  
+                echo "<tr><th>{$timeLabel}</th>";
+
+                for ($i = 0; $i <= 6; $i++) {
+                    $date = date('Y-m-d', strtotime("+$i day", strtotime($weekStart)));
+                    $key  = "{$room}_{$date}_{$time}";
+
+                    $slotDateTime = $date . ' ' . substr($time, 0, 5) . ':00';
+                    $isTooLateToReserve = (strtotime($slotDateTime) <= strtotime($cutoffDateTime));
+
+                    $isBooked = isset($booked[$key]);
+                    $isMine   = isset($myBooked[$key]);
+                    $nameText = $booked[$key] ?? '';
+
+                    $btnClasses = ['slot'];
+                    if ($isBooked) $btnClasses[] = 'booked';
+                    if ($isMine)   $btnClasses[] = 'my-booked';
+                    if ($isTooLateToReserve) $btnClasses[] = 'past-slot';
+
+                    $btnClassStr = implode(' ', $btnClasses);
+
+                    $titleAttr = $nameText ? __('borrower').'：'.$nameText : '';
+                    if ($isTooLateToReserve) {
+                        $label = __('deadline_past');
+                    } 
+                    else {
+                        $label = $isBooked ? __('reserved') : __('reserve'); 
+                    }
+                    $disabled = ($isBooked || $isTooLateToReserve) ? 'disabled' : '';
+
+                    echo '<td>';
+                    echo "<button 
+                            class=\"{$btnClassStr}\"
+                            data-date=\"{$date}\"
+                            data-time=\"{$time}\"
+                            title=\"{$titleAttr}\"
+                            {$disabled}
+                        >{$label}</button>";
+                    echo '</td>';
                 }
-                ?>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-        for ($h = 0; $h < 24; $h++) {
-            $time = sprintf("%02d:00:00", $h); 
-            $timeLabel = substr($time, 0, 5);  
-            echo "<tr><th>{$timeLabel}</th>";
 
-            for ($i = 0; $i < 7; $i++) {
-                $date = date('Y-m-d', strtotime("+$i day", strtotime($weekStart)));
-                $key  = "{$room}_{$date}_{$time}";
-
-                $isBooked = isset($booked[$key]);
-                $isMine   = isset($myBooked[$key]);
-                $nameText = $booked[$key] ?? '';
-
-                $btnClasses = ['slot'];
-                if ($isBooked) $btnClasses[] = 'booked';
-                if ($isMine)   $btnClasses[] = 'my-booked';
-                $btnClassStr = implode(' ', $btnClasses);
-
-                $titleAttr = $nameText ? __('borrower').'：'.$nameText : '';
-                $label = $isBooked ? __('reserved') : __('reserve');
-                $disabled  = $isBooked ? 'disabled' : '';
-
-                echo '<td>';
-                echo "<button 
-                        class=\"{$btnClassStr}\"
-                        data-date=\"{$date}\"
-                        data-time=\"{$time}\"
-                        title=\"{$titleAttr}\"
-                        {$disabled}
-                      >{$label}</button>";
-                echo '</td>';
+                echo "</tr>";
             }
-
-            echo "</tr>";
-        }
-        ?>
-        </tbody>
-    </table>
+            ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<style>
-.slot {
-    width: 100%;
-    padding: 6px;
-}
-.booked {
-    background: #aaa !important;
-    color: #fff;
-    cursor: not-allowed;
-}
-.my-booked {
-    background: #4CAF50 !important;
-    color: #fff;
-}
-</style>
-
 <script>
-const roomSelect = document.getElementById("roomSelect");
-const slots      = document.querySelectorAll(".slot");
+document.addEventListener('DOMContentLoaded', function() {
+    const roomSelect = document.getElementById("roomSelect");
+    const slots      = document.querySelectorAll(".slot");
 
-roomSelect.addEventListener("change", () => {
-    location.href = "reservations.php?room=" + roomSelect.value;
-});
+    roomSelect.addEventListener("change", () => {
+        location.href = "reservations.php?room=" + roomSelect.value;
+    });
 
-slots.forEach(btn => {
-    if (btn.classList.contains("booked")) return;
+    slots.forEach(btn => {
+        if (btn.classList.contains("booked")) return;
 
-    btn.addEventListener("click", () => {
-        const date = btn.dataset.date;
-        const time = btn.dataset.time;  
-        const room = roomSelect.value;
+        btn.addEventListener("click", () => {
+            const date = btn.dataset.date;
+            const time = btn.dataset.time;  
+            const room = roomSelect.value;
 
-        const h = parseInt(time.split(":")[0]);
-        const endTime = String((h + 1) % 24).padStart(2, "0") + ":00";
+            const h = parseInt(time.split(":")[0]);
+            const endTime = String((h + 1) % 24).padStart(2, "0") + ":00";
 
-        const ok = confirm(
-        `<?php echo __('confirm_reserve'); ?>\n\n` +
-        `Room: ${room}\n` +
-        `Date: ${date}\n` +
-        `Time: ${time.slice(0,5)} ～ ${endTime}`
-        );
-        if (!ok) return;
+            const ok = confirm(
+                `<?php echo __('confirm_reserve'); ?>\n\n` +
+                `Room: ${room}\n` +
+                `Date: ${date}\n` +
+                `Time: ${time.slice(0,5)} ～ ${endTime}`
+            );
+            if (!ok) return;
 
-        fetch("reserve_action.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({date, time, room})
-        })
-        .then(r => r.json())
-        .then(res => {
-            alert(res.message);
-            if (res.success) location.reload();
+            fetch("reserve_action.php", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({date, time, room})
+            })
+            .then(r => r.json())
+            .then(res => {
+                alert(res.message);
+                if (res.success) location.reload();
+            });
         });
     });
 });
 </script>
 
 <?php include 'footer.php'; ?>
+
+<style>
+    .slot {
+        width: 100%;
+        padding: 6px;
+    }
+    .booked {
+        background: #888 !important;
+        color: #fff;
+        cursor: not-allowed;
+    }
+    .my-booked {
+        background: #4CAF50 !important;
+        color: #fff;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px; 
+    }
+    .table-wrapper {
+        overflow-x: auto;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 30px;
+    }
+    #scheduleTable {
+        width: 100%;
+        min-width: 800px;
+        border-collapse: collapse;
+    }
+
+    .past-slot {
+        background: #bbb !important;
+        color: #777 !important;
+        cursor: not-allowed;
+        text-decoration: line-through;
+    }
+    @media (max-width: 768px) {
+        #scheduleTable {
+            font-size: 12px;
+        }
+        .slot {
+            padding: 3px;
+            font-size: 11px;
+        }
+        #scheduleTable thead th {
+            width: auto;
+        }
+    }
+</style>

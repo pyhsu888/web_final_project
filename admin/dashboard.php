@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); date_default_timezone_set('Asia/Taipei');
 $isAdmin = true; // Flag for header to adjust paths
 require '../lang.php';
 
@@ -36,7 +36,28 @@ include '../header.php';
             <h3><?php echo __('view_reservations'); ?></h3>
             <p class="info"><?php echo __('all_user_reservations'); ?></p>
         </a>
+        <a href="food.php" class="card"style="text-align:center; text-decoration:none;" >
+            <h3><?php echo __('food_admin'); ?></h3>
+            <p class="info"><?php echo __('food_admin'); ?></p>
+        </a>
     </div>
 </div>
 
 <?php include '../footer.php'; ?>
+
+<style>
+    h3 {
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }
+    .card {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+    }
+</style>

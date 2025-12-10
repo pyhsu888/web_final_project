@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); date_default_timezone_set('Asia/Taipei');
 require 'db_connect.php';
 require 'lang.php';
 
@@ -88,21 +88,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </p>
     </div>
 
-    <!-- Dark Mode Toggle -->
-    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
-    <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        function updateToggleIcon() {
-            themeToggle.textContent = html.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
-        }
-        themeToggle.addEventListener('click', () => {
-            const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateToggleIcon();
-        });
-        updateToggleIcon();
-    </script>
-</body>
-</html>
+<?php include 'footer.php'; ?>
+
+<style>
+    .lang-switch {
+        margin-left: 0;
+    }
+    .lang-switch a.active {
+        color: #333;
+    }
+    [data-theme="dark"] .lang-switch a.active {
+        color: #fff;
+    }
+</style>
